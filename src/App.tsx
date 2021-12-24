@@ -1,25 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+
+import {
+  Box,
+  createTheme,
+  CssBaseline,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
+import initialState from "./initialState";
+import IngredientList from "./IngredientList";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+  typography: {
+    fontSize: 18,
+  },
+});
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <Box
+        sx={{
+          "& > :not(style)": { m: 1, display: "flex", maxWidth: "450px" },
+        }}
+      >
+        <Typography variant="h5" component="h5">
+          Dough Calculator
+        </Typography>
+        <IngredientList />
+      </Box>
+    </ThemeProvider>
   );
 }
 
