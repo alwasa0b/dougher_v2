@@ -9,8 +9,9 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import initialState from "./initialState";
+import initialState, { IngredientDictionary } from "./initialState";
 import IngredientList from "./IngredientList";
+import Dough from "./Dough";
 
 const darkTheme = createTheme({
   palette: {
@@ -21,7 +22,9 @@ const darkTheme = createTheme({
   },
 });
 
+
 function App() {
+  const [ingredients, setIngredient] = useState(initialState);
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -34,7 +37,11 @@ function App() {
         <Typography variant="h5" component="h5">
           Dough Calculator
         </Typography>
-        <IngredientList />
+        <IngredientList
+          ingredients={ingredients}
+          setIngredient={setIngredient}
+        />
+        <Dough ingredients={ingredients} />
       </Box>
     </ThemeProvider>
   );

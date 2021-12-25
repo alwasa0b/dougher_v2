@@ -1,70 +1,65 @@
 import TextField from "@mui/material/TextField";
-import { InputAdornment, MenuItem, Select } from "@mui/material";
-import { Ingredient, IngredientType } from "./initialState";
+
+import {
+  IconButton,
+  InputAdornment,
+  MenuItem,
+  Select,
+  Stack,
+} from "@mui/material";
+
+import { Ingredient, IngredientType, isNumberOrEmpty } from "./initialState";
+
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Cancel";
+import { useState } from "react";
+import { Box } from "@mui/system";
 
 interface IngredientPros {
   ingredient: Ingredient;
-  edit: boolean;
+  showAdd: boolean;
   onChange: (ingredient: Ingredient) => void;
+  addIngredient: () => void;
+  deleteIngredient: () => void;
 }
-
-const isNumberOrEmpty = /^(?:[1-9]\d*)$|^$/;
 
 export default function IngredientComponent({
   ingredient,
-  edit,
   onChange,
+  showAdd,
+  addIngredient,
+  deleteIngredient,
 }: IngredientPros): JSX.Element {
-  return edit ? (
-    <TextField
-      label="Name"
-      fullWidth
-      variant="outlined"
-      onChange={({ target }) => {
-        onChange({
-          ...ingredient,
-          name: target.value,
-        });
-      }}
-      value={ingredient.name || ""}
-      InputProps={{
-        endAdornment: (
-          <InputAdornment position="end">
-            <Select
-              variant="standard"
-              value={ingredient.type}
-              label="Age"
-              onChange={({ target }) =>
-                onChange({
-                  ...ingredient,
-                  type: target.value as IngredientType,
-                })
-              }
-            >
-              <MenuItem value={IngredientType.Dry}>Dry</MenuItem>
-              <MenuItem value={IngredientType.Wet}>Wet</MenuItem>
-              <MenuItem value={IngredientType.Misc}>Misc.</MenuItem>
-            </Select>
-          </InputAdornment>
-        ),
-      }}
-    />
-  ) : (
-    <TextField
-      fullWidth
-      label={ingredient.name}
-      variant="outlined"
-      onChange={({ target }) => {
-        if (isNumberOrEmpty.test(target.value)) {
-          const value = target.value ? Number(target.value) : undefined;
+  return (
+    <Stack direction={"row"}>
+      <TextField
+        fullWidth
+        label={ingredient.type}
+        variant="outlined"
+        onChange={({ target }) => {
+          if (isNumberOrEmpty.test(target.value)) {
+            const value = target.value ? Number(target.value) : undefined;
 
-          onChange({
-            ...ingredient,
-            amount: value,
-          });
-        }
-      }}
-      value={ingredient.amount || ""}
-    />
+            onChange({
+              ...ingredient,
+              amount: value,
+            });
+          }
+        }}
+        value={ingredient.amount || ""}
+      />
+      <Box sx={{ m: 2 }}>
+        <IconButton size="medium">
+          {showAdd ? (
+            <AddIcon onClick={addIngredient} />
+          ) : (
+            <DeleteIcon onClick={deleteIngredient} />
+          )}
+        </IconButton>
+      </Box>
+    </Stack>
   );
 }
