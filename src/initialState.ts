@@ -59,8 +59,44 @@ const initialState: IngredientDictionary = {
   [initialIngredientState.id]: { ...initialIngredientState, new: false },
 };
 
-export const initialUserIngredient: UserIngredient[] = [
-  { name: "Default", ingredients: initialState },
-];
+export const initialUserIngredient = (): UserIngredient[] => {
+  const id1 = generateUUID();
+  const id2 = generateUUID();
+  const id3 = generateUUID();
+  const id4 = generateUUID();
+
+  return [
+    { name: "Create New", ingredients: initialState },
+    {
+      name: "Sourdough",
+      ingredients: {
+        [id1]: {
+          id: id1,
+          new: false,
+          type: IngredientType.Starter,
+          amount: 600,
+        },
+        [id2]: {
+          id: id2,
+          new: false,
+          type: IngredientType.Water,
+          amount: 300,
+        },
+        [id3]: {
+          id: id3,
+          new: false,
+          type: IngredientType.Flour,
+          amount: 365,
+        },
+        [id4]: {
+          id: id4,
+          new: false,
+          type: IngredientType.Salt,
+          amount: 13,
+        },
+      },
+    },
+  ];
+};
 
 export default initialState;
