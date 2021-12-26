@@ -52,12 +52,11 @@ export default function IngredientComponent({
         value={ingredient.amount || ""}
       />
       <Box sx={{ m: 2 }}>
-        <IconButton size="medium">
-          {showAdd ? (
-            <AddIcon onClick={addIngredient} />
-          ) : (
-            <DeleteIcon onClick={deleteIngredient} />
-          )}
+        <IconButton
+          size="medium"
+          onClick={showAdd ? addIngredient : deleteIngredient}
+        >
+          {showAdd ? <AddIcon /> : <DeleteIcon />}
         </IconButton>
       </Box>
     </Stack>

@@ -70,15 +70,16 @@ export default function AddIngredient({
         }}
       />
 
-      <IconButton size="medium">
-        <SaveIcon
-          onClick={() => {
-            onSave(edit);
-          }}
-        />
+      <IconButton
+        size="medium"
+        onClick={() => {
+          onSave(edit);
+        }}
+      >
+        <SaveIcon />
       </IconButton>
-      <IconButton size="medium">
-        <CancelIcon onClick={onCancel} />
+      <IconButton size="medium" onClick={onCancel}>
+        <CancelIcon />
       </IconButton>
     </Stack>
   );
