@@ -24,7 +24,7 @@ export default function IngredientList({
   };
 
   return (
-    <Stack direction={"column"} spacing={2}>
+    <Stack direction={"column"}>
       {Object.keys(ingredients).map((element: string, index: number) =>
         ingredients[element].new ? (
           <AddIngredient

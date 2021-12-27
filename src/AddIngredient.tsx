@@ -13,6 +13,7 @@ import { Ingredient, IngredientType, isNumberOrEmpty } from "./initialState";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useState } from "react";
+import { Box } from "@mui/system";
 
 interface IngredientPros {
   ingredient: Ingredient;
@@ -28,7 +29,7 @@ export default function AddIngredient({
   const [edit, setEdit] = useState<Ingredient>(ingredient);
 
   return (
-    <Stack direction="row" spacing={2} sx={{ m: 2 }}>
+    <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
       <TextField
         label={`${edit.type} Amount`}
         fullWidth
@@ -69,18 +70,21 @@ export default function AddIngredient({
           ),
         }}
       />
-
-      <IconButton
-        size="medium"
-        onClick={() => {
-          onSave(edit);
-        }}
-      >
-        <SaveIcon />
-      </IconButton>
-      <IconButton size="medium" onClick={onCancel}>
-        <CancelIcon />
-      </IconButton>
+      <Box>
+        <Stack direction={"row"} sx={{ mt: 1 }}>
+          <IconButton
+            size="small"
+            onClick={() => {
+              onSave(edit);
+            }}
+          >
+            <SaveIcon />
+          </IconButton>
+          <IconButton size="small" onClick={onCancel}>
+            <CancelIcon />
+          </IconButton>
+        </Stack>
+      </Box>
     </Stack>
   );
 }

@@ -34,7 +34,7 @@ export default function IngredientComponent({
   deleteIngredient,
 }: IngredientPros): JSX.Element {
   return (
-    <Stack direction={"row"}>
+    <Stack direction={"row"} sx={{ mb: 2 }}>
       <TextField
         fullWidth
         label={ingredient.type}
@@ -51,9 +51,9 @@ export default function IngredientComponent({
         }}
         value={ingredient.amount || ""}
       />
-      <Box sx={{ m: 2 }}>
+      <Box sx={{ ml: 2, mt: 1 }}>
         <IconButton
-          size="medium"
+          size="small"
           onClick={showAdd ? addIngredient : deleteIngredient}
         >
           {showAdd ? <AddIcon /> : <DeleteIcon />}
