@@ -37,10 +37,43 @@ const darkTheme = createTheme({
 
 const initState = initialUserIngredient();
 
-function App() {
-  const [selected, setSelected] = useState(0);
+const stored =
+  (window.localStorage.getItem("dougher") &&
+    JSON.parse(window.localStorage.getItem("dougher") || "")) ||
+  initState;
 
-  const [ingredientList, setIngredientList] = useState(initState);
+const selectedStored =
+  (window.localStorage.getItem("selected") &&
+    JSON.parse(window.localStorage.getItem("selected") || "")) ||
+  0;
+
+const useSetStorage = (): any => {
+  const [ingredientList, setIngredientList] = useState(stored);
+
+  const setStorage = (value: UserIngredient[]) => {
+    window.localStorage.setItem("dougher", JSON.stringify(value));
+    setIngredientList(value);
+  };
+  return [ingredientList, setStorage];
+};
+
+
+const useSetSelected = (): any => {
+  const [selected, setSelected] = useState(selectedStored);
+
+
+  const setStorage = (value: number) => {
+    window.localStorage.setItem("selected", JSON.stringify(value));
+    setSelected(value);
+  };
+
+  return [selected, setStorage];
+};
+
+function App() {
+  const [selected, setSelected] = useSetSelected();
+
+  const [ingredientList, setIngredientList] = useSetStorage();
 
   const [ingredients, setIngredient] = useState(
     ingredientList[selected].ingredients
@@ -165,30 +198,33 @@ const OldDoughSelector = ({
   setIngredient,
 }: MainPropsWithRender): JSX.Element => {
   return (
-    <Stack direction={"row"} spacing={2} sx={{ m: 2 }}>
+    <Stack direction={"row"} spacing={2}>
       {renderSelector()}
+      <Box>
+        <Stack direction={"row"} sx={{ mt: 1 }}>
+          <IconButton
+            size="small"
+            onClick={() => {
+              setIngredientList(
+                ingredientList.map((g, i) =>
+                  i === selected ? { ...g, ingredients } : g
+                )
+              );
+            }}
+          >
+            <SaveIcon />
+          </IconButton>
 
-      <IconButton
-        size="small"
-        onClick={() => {
-          setIngredientList(
-            ingredientList.map((g, i) =>
-              i === selected ? { ...g, ingredients } : g
-            )
-          );
-        }}
-      >
-        <SaveIcon />
-      </IconButton>
-
-      <IconButton
-        size="small"
-        onClick={() => {
-          setIngredient(ingredientList[selected].ingredients);
-        }}
-      >
-        <CancelIcon />
-      </IconButton>
+          <IconButton
+            size="small"
+            onClick={() => {
+              setIngredient(ingredientList[selected].ingredients);
+            }}
+          >
+            <CancelIcon />
+          </IconButton>
+        </Stack>
+      </Box>
     </Stack>
   );
 };
@@ -205,7 +241,7 @@ const NewDoughSelector = ({
   const [name, setName] = useState("");
 
   return (
-    <Stack direction={"row"} spacing={2}>
+    <Stack direction={"row"} spacing={2} sx={{ mb: 20 }}>
       {saving && (
         <TextField
           onChange={({ target }) => setName(target.value)}
@@ -213,41 +249,45 @@ const NewDoughSelector = ({
         />
       )}
       {!saving && renderSelector()}
-      {saving && (
-        <IconButton
-          size="small"
-          onClick={() => {
-            setSaving(false);
-            const newIndex = ingredientList.length;
+      <Box>
+        <Stack direction={"row"} sx={{ mt: 1 }}>
+          {saving && (
+            <IconButton
+              size="small"
+              onClick={() => {
+                setSaving(false);
+                const newIndex = ingredientList.length;
 
-            setIngredientList([...ingredientList, { name, ingredients }]);
+                setIngredientList([...ingredientList, { name, ingredients }]);
 
-            setSelected(newIndex);
-          }}
-        >
-          <CheckIcon />
-        </IconButton>
-      )}
-      {!saving && (
-        <IconButton
-          size="small"
-          onClick={() => {
-            setSaving(true);
-          }}
-        >
-          <SaveIcon />
-        </IconButton>
-      )}
+                setSelected(newIndex);
+              }}
+            >
+              <CheckIcon />
+            </IconButton>
+          )}
+          {!saving && (
+            <IconButton
+              size="small"
+              onClick={() => {
+                setSaving(true);
+              }}
+            >
+              <SaveIcon />
+            </IconButton>
+          )}
 
-      <IconButton
-        size="small"
-        onClick={() => {
-          setSaving(false);
-          setIngredient(ingredientList[0].ingredients);
-        }}
-      >
-        <CancelIcon />
-      </IconButton>
+          <IconButton
+            size="small"
+            onClick={() => {
+              setSaving(false);
+              setIngredient(ingredientList[0].ingredients);
+            }}
+          >
+            <CancelIcon />
+          </IconButton>
+        </Stack>
+      </Box>
     </Stack>
   );
 };
