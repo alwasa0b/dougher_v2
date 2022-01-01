@@ -52,7 +52,7 @@ const OldDoughSelector = ({ renderSelector }: MainProps): JSX.Element => {
   const cancel = useStore((state) => state.cancel);
 
   return (
-    <Stack direction={"row"} spacing={2}>
+    <Stack direction={"row"} spacing={2} sx={{ pb: 2 }}>
       {renderSelector()}
       <Box>
         <Stack direction={"row"} sx={{ mt: 1 }}>
