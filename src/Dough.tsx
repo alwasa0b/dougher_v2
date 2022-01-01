@@ -1,16 +1,13 @@
-import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import useStore from "./store";
+
 import {
   Ingredient,
   IngredientDictionary,
   IngredientType,
-} from "./initialState";
-
-interface props {
-  ingredients: IngredientDictionary;
-}
+} from "./store/types";
 
 const calculate = (ingredientList: Ingredient[], type: IngredientType) =>
   ingredientList.reduce((p, n) => {
@@ -40,8 +37,10 @@ const useCalculator = (ingredients: IngredientDictionary) => {
   return { hydration, water, flour, starter, sugar, salt };
 };
 
-export default function Dough({ ingredients }: props) {
-  const { hydration, water, flour, salt, sugar } = useCalculator(ingredients);
+export default function Dough() {
+  const recipe = useStore((state) => state.recipe);
+
+  const { hydration, water, flour, salt, sugar } = useCalculator(recipe);
 
   return (
     <Card sx={{ minWidth: 275 }}>

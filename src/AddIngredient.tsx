@@ -1,6 +1,5 @@
-import TextField from "@mui/material/TextField";
-
 import {
+  TextField,
   IconButton,
   InputAdornment,
   MenuItem,
@@ -8,25 +7,27 @@ import {
   Stack,
 } from "@mui/material";
 
-import { Ingredient, IngredientType, isNumberOrEmpty } from "./initialState";
-
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Cancel";
-import { useState } from "react";
 import { Box } from "@mui/system";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import useStore from "./store";
+import { isNumberOrEmpty } from "./store/utils";
+import { IngredientType } from "./store/types";
 
 interface IngredientPros {
-  ingredient: Ingredient;
-  onSave: (ingredient: Ingredient) => void;
-  onCancel: () => void;
+  id: string;
+  showAdd: boolean;
 }
 
 export default function AddIngredient({
-  ingredient,
-  onSave,
-  onCancel,
+  id,
+  showAdd,
 }: IngredientPros): JSX.Element {
-  const [edit, setEdit] = useState<Ingredient>(ingredient);
+  const edit = useStore((state) => state.recipe[id]);
+  const setAmount = useStore((state) => state.setAmount);
+  const setType = useStore((state) => state.setType);
+  const addIngredient = useStore((state) => state.addIngredient);
+  const deleteIngredient = useStore((state) => state.deleteIngredient(id));
 
   return (
     <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
@@ -38,10 +39,7 @@ export default function AddIngredient({
           if (isNumberOrEmpty.test(target.value)) {
             const value = target.value ? Number(target.value) : undefined;
 
-            setEdit({
-              ...edit,
-              amount: value,
-            });
+            setAmount(id, value);
           }
         }}
         value={edit.amount || ""}
@@ -53,37 +51,26 @@ export default function AddIngredient({
                 value={edit.type}
                 label="Age"
                 onChange={({ target }) =>
-                  setEdit({
-                    ...edit,
-                    type: target.value as IngredientType,
-                  })
+                  setType(id, target.value as IngredientType)
                 }
               >
-                <MenuItem value={IngredientType.Water}>Water</MenuItem>
-                <MenuItem value={IngredientType.Flour}>Flour</MenuItem>
-                <MenuItem value={IngredientType.Starter}>Starter</MenuItem>
-                <MenuItem value={IngredientType.Salt}>Salt</MenuItem>
-                <MenuItem value={IngredientType.Sugar}>Sugar</MenuItem>
-                <MenuItem value={IngredientType.Misc}>Misc.</MenuItem>
+                {Object.keys(IngredientType).map((t) => (
+                  <MenuItem key={t} value={t}>
+                    {t}
+                  </MenuItem>
+                ))}
               </Select>
             </InputAdornment>
           ),
         }}
       />
-      <Box>
-        <Stack direction={"row"} sx={{ mt: 1 }}>
-          <IconButton
-            size="small"
-            onClick={() => {
-              onSave(edit);
-            }}
-          >
-            <SaveIcon />
-          </IconButton>
-          <IconButton size="small" onClick={onCancel}>
-            <CancelIcon />
-          </IconButton>
-        </Stack>
+      <Box sx={{ ml: 2, mt: 1 }}>
+        <IconButton
+          size="small"
+          onClick={showAdd ? addIngredient : deleteIngredient}
+        >
+          {showAdd ? <AddIcon /> : <DeleteIcon />}
+        </IconButton>
       </Box>
     </Stack>
   );
