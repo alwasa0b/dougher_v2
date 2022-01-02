@@ -76,7 +76,7 @@ const NewDoughSelector = ({ renderSelector }: MainProps): JSX.Element => {
   const setName = useStore((state) => state.setName);
 
   return (
-    <Stack direction={"row"} spacing={2} sx={{ mb: 20 }}>
+    <Stack direction={"row"} spacing={2} sx={{ pb: 2 }}>
       {saving && (
         <TextField
           onChange={({ target }) => setName(target.value)}

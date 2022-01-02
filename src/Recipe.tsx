@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import AddIngredient from "./AddIngredient";
+import AddIngredient from "./Ingredient";
 import useStore from "./store";
 import { Ingredient } from "./store/types";
 

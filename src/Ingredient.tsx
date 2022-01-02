@@ -19,7 +19,7 @@ interface IngredientPros {
   showAdd: boolean;
 }
 
-export default function AddIngredient({
+export default function Ingredient({
   id,
   showAdd,
 }: IngredientPros): JSX.Element {

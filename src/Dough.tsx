@@ -25,6 +25,7 @@ const useCalculator = (ingredients: IngredientDictionary) => {
   const starter = Number(
     (calculate(ingredientList, IngredientType.Starter) / 2).toFixed(2)
   );
+  
   const water = calculate(ingredientList, IngredientType.Water) + starter;
   const flour = calculate(ingredientList, IngredientType.Flour) + starter;
   const sugar = calculate(ingredientList, IngredientType.Sugar);
